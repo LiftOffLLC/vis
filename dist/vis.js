@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 4.21.0
- * @date    2017-10-12
+ * @version 2.2.4
+ * @date    2017-10-26
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -2771,8 +2771,9 @@ DataSet.prototype._addItem = function (item) {
   if (id != undefined) {
     // check whether this id is already taken
     if (this._data[id]) {
-      // item already exists
-      throw new Error('Cannot add item: item with id ' + id + ' already exists');
+      //ngg-vis
+      this.update(item);
+      //ngg-vis-end
     }
   } else {
     // generate an id
@@ -9510,6 +9511,10 @@ Core.prototype._create = function (container) {
     scrollTopMin: 0
   };
 
+  //ngg-vis
+  this.executed = false;
+  //ngg-vis end
+
   this.on('rangechange', function () {
     if (this.initialDrawDone === true) {
       this._redraw();
@@ -9659,16 +9664,27 @@ Core.prototype._create = function (container) {
    *
    * @param {scroll} event
    */
+  //ngg-vis
   function onMouseScrollSide(event) {
     if (!me.options.verticalScroll) return;
     event.preventDefault();
     if (me.isActive()) {
       var adjusted = -event.target.scrollTop;
+      if (!me.executed) {
+        me.executed = true;
+        setTimeout(function () {
+          adjusted = 0;
+          me._setScrollTop(adjusted);
+          me._redraw();
+          me.emit('scrollSide', event);
+        }, 500);
+      }
       me._setScrollTop(adjusted);
       me._redraw();
       me.emit('scrollSide', event);
     }
   }
+  //ngg-vis-end
 
   this.dom.left.parentNode.addEventListener('scroll', onMouseScrollSide.bind(this));
   this.dom.right.parentNode.addEventListener('scroll', onMouseScrollSide.bind(this));
@@ -10304,7 +10320,9 @@ Core.prototype._redraw = function () {
 
   // calculate the heights. If any of the side panels is empty, we set the height to
   // minus the border width, such that the border will be invisible
-  props.center.height = dom.center.offsetHeight;
+  //ngg-vis
+  props.center.height = dom.left.offsetHeight;
+  //ngg-vis end
   props.left.height = dom.left.offsetHeight;
   props.right.height = dom.right.offsetHeight;
   props.top.height = dom.top.clientHeight || -props.border.top;
@@ -10383,8 +10401,11 @@ Core.prototype._redraw = function () {
   }
 
   if (!options.verticalScroll || props.center.height < props.centerContainer.height) {
-    dom.left.style.top = offset + 'px';
-    dom.right.style.top = offset + 'px';
+    //ngg-vis
+    dom.left.style.top = '0px';
+    dom.right.style.top = '0px';
+    dom.center.style.top = '0px';
+    //ngg-vis end
     dom.rightContainer.className = dom.rightContainer.className.replace(new RegExp('(?:^|\\s)' + 'vis-vertical-scroll' + '(?:\\s|$)'), ' ');
     dom.leftContainer.className = dom.leftContainer.className.replace(new RegExp('(?:^|\\s)' + 'vis-vertical-scroll' + '(?:\\s|$)'), ' ');
     props.left.width = dom.leftContainer.clientWidth || -props.border.left;
@@ -17577,6 +17598,9 @@ function ItemSet(body, options) {
   var me = this;
   this.itemsData = null; // DataSet
   this.groupsData = null; // DataSet
+  //ngg-vis
+  this.resourceSearchTerm = null;
+  //ngg-vis end
 
   // listeners for the DataSet of the items
   this.itemListeners = {
@@ -19127,6 +19151,12 @@ ItemSet.prototype._onDragEnd = function (event) {
 };
 
 ItemSet.prototype._onGroupClick = function (event) {
+  //ngg-vis
+  if (this.resourceSearchTerm && this.resourceSearchTerm.length > 0) {
+    return;
+  }
+  //ngg-vis-end
+
   var group = this.groupFromTarget(event);
 
   if (!group || !group.nestedGroups) return;
@@ -40901,8 +40931,25 @@ Timeline.prototype.setItems = function (items) {
   }
 
   // set items
-  this.itemsData = newDataSet;
-  this.itemSet && this.itemSet.setItems(newDataSet);
+  //ngg-vis
+  if (this.itemsData && items) {
+    var itemsLen = items.length;
+    var remItems = [];
+    var updatedItems = [];
+    for (var i = 0; i < itemsLen; i++) {
+      if (this.itemsData.get(items[i].id)) {
+        updatedItems.push(items[i]);
+      } else {
+        remItems = remItems.concat(items[i]);
+      }
+    }
+    this.itemsData.update(updatedItems);
+    this.itemsData.add(remItems);
+  } else {
+    this.itemsData = newDataSet;
+    this.itemSet && this.itemSet.setItems(newDataSet);
+  }
+  //ngg-vis end
 };
 
 /**
@@ -41366,7 +41413,57 @@ Timeline.prototype.toggleRollingMode = function () {
     this.range.startRolling();
   }
 };
+//ngg-vis
+Timeline.prototype.searchGroupData = function (term, sortedOrder) {
+  this.itemSet.resourceSearchTerm = term;
+  var domGroups = document.querySelectorAll('.vis-nesting-group');
+  var domGroupsLen = domGroups.length;
+  for (var d = 0; d < domGroupsLen; d++) {
+    if (term && term.length > 0) {
+      util.addClassName(domGroups[d], 'cursor-default');
+    } else {
+      util.removeClassName(domGroups[d], 'cursor-default');
+    }
+  }
+  var groupsData = this.groupsData.getDataSet();
+  var data = groupsData.get();
+  var groups = data.filter(function (group) {
+    return !group.nestedGroups;
+  });
+  var nestedGroups = data.filter(function (group) {
+    return group.nestedGroups;
+  });
+  var groupsLen = groups.length;
+  var nestedGroupsLen = nestedGroups.length;
+  var nestedGroupsIdObj = {};
+  for (var i = 0; i < groupsLen; i++) {
+    var item = groups[i];
+    if ((new RegExp("^" + term, "i").test(item.name) || new RegExp(" " + term, "i").test(item.name)) && item.hasOwnProperty('nestedInGroup')) {
+      nestedGroupsIdObj[item.nestedInGroup] = true;
+      item.visible = true;
+    } else {
+      item.visible = false;
+    }
+  }
+  for (var j = 0; j < nestedGroupsLen; j++) {
+    var group = nestedGroups[j];
+    if (nestedGroupsIdObj[group.id]) {
+      group.showNested = true;
+    } else {
+      group.showNested = false;
+    }
+  }
+  var cmpldData = groups.concat(nestedGroups);
+  groupsData.update(cmpldData);
+};
 
+Timeline.prototype.removeItems = function (ids) {
+  if (!ids || Array.isArray(ids) && ids.length == 0) {
+    return;
+  }
+  this.itemsData.remove(ids);
+};
+//ngg-vis end
 module.exports = Timeline;
 
 /***/ }),

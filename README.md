@@ -1,11 +1,5 @@
 # vis.js
 
-[![Join the chat at https://gitter.im/vis-js/Lobby](https://badges.gitter.im/vis-js/Lobby.svg)](https://gitter.im/vis-js/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-<a href="https://github.com/almende/vis/blob/develop/misc/we_need_help.md">
-  <img align="right" src="https://raw.githubusercontent.com/almende/vis/master/misc/we_need_help.png">
-</a>
-
 Vis.js is a dynamic, browser based visualization library.
 The library is designed to be easy to use, handle large amounts
 of dynamic data, and enable manipulation of the data.
@@ -22,23 +16,6 @@ The library consists of the following components:
 
 The vis.js library was initially developed by [Almende B.V](http://almende.com).
 
-## Badges
-
-[![NPM](https://nodei.co/npm/vis.png?downloads=true&downloadRank=true)](https://nodei.co/npm/vis/)
-
-[![Dependency Status](https://david-dm.org/almende/vis/status.svg)](https://david-dm.org/almende/vis)
-[![devDependency Status](https://david-dm.org/almende/vis/dev-status.svg)](https://david-dm.org/almende/vis?type=dev)
-
-[![last version on CDNJS](https://img.shields.io/cdnjs/v/vis.svg)](https://cdnjs.com/libraries/vis)
-[![GitHub contributors](https://img.shields.io/github/contributors/almende/vis.svg)](https://github.com/almende/vis/graphs/contributors)
-[![GitHub stars](https://img.shields.io/github/stars/almende/vis.svg)](https://github.com/almende/vis/stargazers)
-
-[![GitHub issues](https://img.shields.io/github/issues/almende/vis.svg)](https://github.com/almende/vis/issues)
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/almende/vis.svg)](http://isitmaintained.com/project/almende/vis "Percentage of issues still open")
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/almende/vis.svg)](http://isitmaintained.com/project/almende/vis "Average time to resolve an issue")
-[![Pending Pull-Requests](http://githubbadges.herokuapp.com/almende/vis/pulls.svg)](https://github.com/almende/vis/pulls)
-
-[![Code Climate](https://codeclimate.com/github/almende/vis/badges/gpa.svg)](https://codeclimate.com/github/almende/vis) 
 
 ## Install
 
@@ -307,39 +284,35 @@ And loaded into a webpage:
 #### Example 4: Integrate vis.js components directly in your webpack build
 
 You can integrate e.g. the timeline component directly in you webpack build.
-Therefor you can e.g. import the component-files from root direcory (starting with "index-").
+Therefor you just import the component-files from root direcory (starting with "index-").
 
 ```js
-import { DataSet, Timeline } from 'vis/index-timeline-graph2d';
+var visTimeline = require('vis/index-timeline-graph2d');
 
 var container = document.getElementById('visualization');
 var data = new DataSet();
 var timeline = new Timeline(container, data, {});
 ```
 
-To get this to work you'll need to add some babel-loader-setting to your webpack-config:
+To get this to work you'll need to add the some babel-loader-setting:
 
 ```js
 module: {
-  module: {
-    rules: [{
-      test: /node_modules[\\\/]vis[\\\/].*\.js$/,
-      loader: 'babel-loader',
-      query: {
-        cacheDirectory: true,
-        presets: [ "babel-preset-es2015" ].map(require.resolve),
-        plugins: [
-          "transform-es3-property-literals", // #2452
-          "transform-es3-member-expression-literals", // #2566
-          "transform-runtime" // #2566
-        ]
-      }
-    }]
-  }
+  loaders: [{
+    test: /node_modules[\\\/]vis[\\\/].*\.js$/,
+    loader: 'babel',
+    query: {
+      cacheDirectory: true,
+      presets: ["es2015"],
+      plugins: [
+        "transform-es3-property-literals",
+        "transform-es3-member-expression-literals",
+        "transform-runtime"
+      ]
+    }
+  }]
 }
 ```
-
-There is also an [demo-project](https://github.com/mojoaxel/vis-webpack-demo) showing the integration of vis.js using webpack.
 
 ## Test
 
