@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.2.4
- * @date    2017-10-26
+ * @date    2017-10-27
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -41115,7 +41115,7 @@ Timeline.prototype.focus = function (id, options) {
       // Double check we ended at the proper scroll position
       setFinalVerticalPosition();
 
-      // Let the redraw settle and finalize the position.      
+      // Let the redraw settle and finalize the position.
       setTimeout(setFinalVerticalPosition, 100);
     };
 
@@ -41438,7 +41438,7 @@ Timeline.prototype.searchGroupData = function (term, sortedOrder) {
   var nestedGroupsIdObj = {};
   for (var i = 0; i < groupsLen; i++) {
     var item = groups[i];
-    if ((new RegExp("^" + term, "i").test(item.name) || new RegExp(" " + term, "i").test(item.name)) && item.hasOwnProperty('nestedInGroup')) {
+    if (new RegExp("^" + term, "i").test(item.name) || new RegExp(" " + term, "i").test(item.name) || new RegExp("^" + term).test(item.id) && item.hasOwnProperty('nestedInGroup')) {
       nestedGroupsIdObj[item.nestedInGroup] = true;
       item.visible = true;
     } else {
