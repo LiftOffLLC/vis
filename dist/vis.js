@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.2.4
- * @date    2017-10-27
+ * @date    2017-10-31
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -17765,7 +17765,7 @@ ItemSet.prototype._create = function () {
   this.body.dom.centerContainer.addEventListener('mouseover', this._onMouseOver.bind(this));
   this.body.dom.centerContainer.addEventListener('mouseout', this._onMouseOut.bind(this));
   this.body.dom.centerContainer.addEventListener('mousemove', this._onMouseMove.bind(this));
-  // right-click on timeline 
+  // right-click on timeline
   this.body.dom.centerContainer.addEventListener('contextmenu', this._onDragEnd.bind(this));
 
   this.body.dom.centerContainer.addEventListener('mousewheel', this._onMouseWheel.bind(this));
@@ -18376,6 +18376,10 @@ ItemSet.prototype.setGroups = function (groups) {
           }
           groupsData.update(updatedNestedGroup);
         });
+        if (group.nestedGroups.length === 0) {
+          group.showNested = false;
+          groupsData.update(group);
+        }
       }
     });
 
@@ -18469,7 +18473,7 @@ ItemSet.prototype._onUpdate = function (ids) {
     var selected;
 
     if (item) {
-      // update item   	
+      // update item
       if (!constructor || !(item instanceof constructor)) {
         // item type has changed, delete the item and recreate it
         selected = item.selected; // preserve selection of this item
@@ -19275,7 +19279,7 @@ ItemSet.prototype._onGroupDrag = function (event) {
           else if (origOrder[curPos + orgOffset] == draggedId) {
               orgOffset = 1;
             }
-            // found a group (apart from dragged group) that has the wrong position -> switch with the 
+            // found a group (apart from dragged group) that has the wrong position -> switch with the
             // group at the position where other one should be, fix index arrays and continue
             else {
                 var slippedPosition = newOrder.indexOf(origOrder[curPos + orgOffset]);
@@ -19500,7 +19504,7 @@ ItemSet.prototype._onUpdateItem = function (item) {
 /**
  * Handle drop event of data on item
  * Only called when `objectData.target === 'item'.
- * @param {Event} event The event 
+ * @param {Event} event The event
  * @private
  */
 ItemSet.prototype._onDropObjectOnItem = function (event) {
