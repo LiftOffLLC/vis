@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.2.4
- * @date    2017-10-31
+ * @date    2017-11-13
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -41466,6 +41466,33 @@ Timeline.prototype.removeItems = function (ids) {
     return;
   }
   this.itemsData.remove(ids);
+};
+
+Timeline.prototype.highLightTech = function (id) {
+
+  var groupsData = this.groupsData.getDataSet();
+  var data = groupsData.get();
+  var groups = data.filter(function (group) {
+    return !group.nestedGroups;
+  });
+  var nestedGroups = data.filter(function (group) {
+    return group.nestedGroups;
+  });
+  var groupsLen = groups.length;
+  var nestedGroupsLen = nestedGroups.length;
+  var nestedGroupsIdObj = {};
+  for (var i = 0; i < groupsLen; i++) {
+    var item = groups[i];
+    if (Number(item.id) === id) {
+      nestedGroupsIdObj[item.nestedInGroup] = true;
+      item.className = item.className + ' res-hilite';
+    } else {
+      item.className = item.className.replace(/ res-hilite/g, '');
+    }
+  }
+
+  var cmpldData = groups.concat(nestedGroups);
+  groupsData.update(cmpldData);
 };
 //ngg-vis end
 module.exports = Timeline;
