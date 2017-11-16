@@ -313,7 +313,8 @@ module: {
   }]
 }
 ```
-
+## Commits
+  Each time there is a push to master, update the package version.
 ## Test
 
 To test the library, install the project dependencies once:
