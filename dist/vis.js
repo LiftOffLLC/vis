@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.2.4
- * @date    2017-11-13
+ * @version 2.2.5
+ * @date    2017-12-22
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -1929,7 +1929,7 @@ if (typeof window !== 'undefined') {
 "use strict";
 
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -3280,7 +3280,7 @@ module.exports = DataView;
 
 var store = __webpack_require__(57)('wks');
 var uid = __webpack_require__(40);
-var Symbol = __webpack_require__(18).Symbol;
+var Symbol = __webpack_require__(19).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
 
 var $exports = module.exports = function (name) {
@@ -3514,6 +3514,12 @@ exports.drawBar = function (x, y, width, height, className, JSONcontainer, svgCo
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = { "default": __webpack_require__(160), __esModule: true };
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -3522,7 +3528,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.printStyle = undefined;
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -3917,7 +3923,7 @@ exports['default'] = Validator;
 exports.printStyle = printStyle;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3981,10 +3987,10 @@ Component.prototype._isResized = function () {
 module.exports = Component;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(18);
+var global = __webpack_require__(19);
 var core = __webpack_require__(7);
 var ctx = __webpack_require__(80);
 var hide = __webpack_require__(26);
@@ -4048,7 +4054,7 @@ module.exports = $export;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -4058,12 +4064,6 @@ var global = module.exports = typeof window != 'undefined' && window.Math == Mat
   : Function('return this')();
 if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(160), __esModule: true };
 
 /***/ }),
 /* 20 */
@@ -6574,7 +6574,7 @@ var _typeof3 = _interopRequireDefault(_typeof2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var util = __webpack_require__(2);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 var TimeStep = __webpack_require__(66);
 var DateUtil = __webpack_require__(36);
 var moment = __webpack_require__(9);
@@ -7081,7 +7081,7 @@ module.exports = TimeAxis;
 
 var Hammer = __webpack_require__(10);
 var util = __webpack_require__(2);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 var moment = __webpack_require__(9);
 var locales = __webpack_require__(98);
 
@@ -7386,7 +7386,7 @@ var Text = __webpack_require__(211)['default'];
 var Triangle = __webpack_require__(212)['default'];
 var TriangleDown = __webpack_require__(213)['default'];
 
-var _require = __webpack_require__(15),
+var _require = __webpack_require__(16),
     printStyle = _require.printStyle;
 
 /**
@@ -8251,7 +8251,7 @@ exports['default'] = ComponentUtil;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(125);
-var global = __webpack_require__(18);
+var global = __webpack_require__(19);
 var hide = __webpack_require__(26);
 var Iterators = __webpack_require__(31);
 var TO_STRING_TAG = __webpack_require__(13)('toStringTag');
@@ -8392,7 +8392,7 @@ module.exports = function (key) {
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(18);
+var global = __webpack_require__(19);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
 module.exports = function (key) {
@@ -8458,7 +8458,7 @@ exports.f = __webpack_require__(13);
 /* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(18);
+var global = __webpack_require__(19);
 var core = __webpack_require__(7);
 var LIBRARY = __webpack_require__(52);
 var wksExt = __webpack_require__(61);
@@ -8487,7 +8487,7 @@ var _keys = __webpack_require__(8);
 
 var _keys2 = _interopRequireDefault(_keys);
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -8499,7 +8499,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var util = __webpack_require__(2);
 var moment = __webpack_require__(9);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 var DateUtil = __webpack_require__(36);
 
 /**
@@ -9393,7 +9393,7 @@ module.exports = Range;
 "use strict";
 
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -11575,7 +11575,7 @@ module.exports = TimeStep;
 
 
 var util = __webpack_require__(2);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 var moment = __webpack_require__(9);
 var locales = __webpack_require__(98);
 
@@ -13149,7 +13149,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -14357,7 +14357,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -15588,7 +15588,7 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 "use strict";
 
 var LIBRARY = __webpack_require__(52);
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 var redefine = __webpack_require__(83);
 var hide = __webpack_require__(26);
 var has = __webpack_require__(22);
@@ -15698,7 +15698,7 @@ module.exports = !__webpack_require__(21) && !__webpack_require__(28)(function (
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(32);
-var document = __webpack_require__(18).document;
+var document = __webpack_require__(19).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
 module.exports = function (it) {
@@ -15789,7 +15789,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // most Object methods by ES6 should accept primitives
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 var core = __webpack_require__(7);
 var fails = __webpack_require__(28);
 module.exports = function (KEY, exec) {
@@ -17454,6 +17454,10 @@ exports['es_ES'] = exports['es'];
 "use strict";
 
 
+var _stringify = __webpack_require__(15);
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _create = __webpack_require__(29);
 
 var _create2 = _interopRequireDefault(_create);
@@ -17469,7 +17473,7 @@ var util = __webpack_require__(2);
 var DataSet = __webpack_require__(11);
 var DataView = __webpack_require__(12);
 var TimeStep = __webpack_require__(66);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 var Group = __webpack_require__(68);
 var BackgroundGroup = __webpack_require__(69);
 var BoxItem = __webpack_require__(101);
@@ -19149,6 +19153,13 @@ ItemSet.prototype._onDragEnd = function (event) {
             me.body.emitter.emit('_change');
           }
         });
+
+        //ngg-vis
+        var dataTransfer = new window.DataTransfer();
+        dataTransfer.setData('text', (0, _stringify2['default'])(itemData));
+        event.dataTransfer = dataTransfer;
+        this._onDropObjectOnItem(event);
+        //ngg-vis-end
       }
     }.bind(this));
   }
@@ -21446,7 +21457,7 @@ var util = __webpack_require__(2);
 var DOMutil = __webpack_require__(14);
 var DataSet = __webpack_require__(11);
 var DataView = __webpack_require__(12);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 var DataAxis = __webpack_require__(107);
 var GraphGroup = __webpack_require__(109);
 var Legend = __webpack_require__(112);
@@ -22530,7 +22541,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var util = __webpack_require__(2);
 var DOMutil = __webpack_require__(14);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 var DataScale = __webpack_require__(108);
 /**
  * A horizontal time axis
@@ -24102,7 +24113,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var util = __webpack_require__(2);
 var DOMutil = __webpack_require__(14);
-var Component = __webpack_require__(16);
+var Component = __webpack_require__(17);
 
 /**
  * Legend for Graph2d
@@ -29187,7 +29198,7 @@ module.exports = function (index, length) {
 /* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var document = __webpack_require__(18).document;
+var document = __webpack_require__(19).document;
 module.exports = document && document.documentElement;
 
 
@@ -29256,7 +29267,7 @@ module.exports = function create(P, D) {
 /* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 $export($export.S, 'Object', { create: __webpack_require__(54) });
 
@@ -29323,10 +29334,10 @@ module.exports = __webpack_require__(7).Symbol;
 "use strict";
 
 // ECMAScript 6 symbols shim
-var global = __webpack_require__(18);
+var global = __webpack_require__(19);
 var has = __webpack_require__(22);
 var DESCRIPTORS = __webpack_require__(21);
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 var redefine = __webpack_require__(83);
 var META = __webpack_require__(147).KEY;
 var $fails = __webpack_require__(28);
@@ -34563,9 +34574,9 @@ var Point2d = __webpack_require__(91);
 var Slider = __webpack_require__(92);
 var StepNumber = __webpack_require__(93);
 var Settings = __webpack_require__(94);
-var Validator = __webpack_require__(15)['default'];
+var Validator = __webpack_require__(16)['default'];
 
-var _require = __webpack_require__(15),
+var _require = __webpack_require__(16),
     printStyle = _require.printStyle;
 
 var _require2 = __webpack_require__(172),
@@ -36883,7 +36894,7 @@ module.exports = __webpack_require__(7).Object.assign;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 
 $export($export.S + $export.F, 'Object', { assign: __webpack_require__(164) });
 
@@ -36948,7 +36959,7 @@ module.exports = __webpack_require__(7).Math.sign;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.28 Math.sign(x)
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 
 $export($export.S, 'Math', { sign: __webpack_require__(168) });
 
@@ -36985,7 +36996,7 @@ module.exports = function defineProperty(it, key, desc) {
 /* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
 $export($export.S + $export.F * !__webpack_require__(21), 'Object', { defineProperty: __webpack_require__(20).f });
 
@@ -40626,7 +40637,7 @@ exports.timeline = {
     },
 
     BackgroundGroup: __webpack_require__(69),
-    Component: __webpack_require__(16),
+    Component: __webpack_require__(17),
     CurrentTime: __webpack_require__(67),
     CustomTime: __webpack_require__(46),
     DataAxis: __webpack_require__(107),
@@ -40663,12 +40674,12 @@ var CurrentTime = __webpack_require__(67);
 var CustomTime = __webpack_require__(46);
 var ItemSet = __webpack_require__(99);
 
-var printStyle = __webpack_require__(15).printStyle;
+var printStyle = __webpack_require__(16).printStyle;
 var allOptions = __webpack_require__(105).allOptions;
 var configureOptions = __webpack_require__(105).configureOptions;
 
 var Configurator = __webpack_require__(71)['default'];
-var Validator = __webpack_require__(15)['default'];
+var Validator = __webpack_require__(16)['default'];
 
 /**
  * Create a timeline visualization
@@ -41508,7 +41519,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -42172,12 +42183,12 @@ var CurrentTime = __webpack_require__(67);
 var CustomTime = __webpack_require__(46);
 var LineGraph = __webpack_require__(106);
 
-var printStyle = __webpack_require__(15).printStyle;
+var printStyle = __webpack_require__(16).printStyle;
 var allOptions = __webpack_require__(113).allOptions;
 var configureOptions = __webpack_require__(113).configureOptions;
 
 var Configurator = __webpack_require__(71)['default'];
-var Validator = __webpack_require__(15)['default'];
+var Validator = __webpack_require__(16)['default'];
 
 /**
  * Create a timeline visualization
@@ -42570,9 +42581,9 @@ var SelectionHandler = __webpack_require__(234)['default'];
 var LayoutEngine = __webpack_require__(235)['default'];
 var ManipulationSystem = __webpack_require__(237)['default'];
 var Configurator = __webpack_require__(71)['default'];
-var Validator = __webpack_require__(15)['default'];
+var Validator = __webpack_require__(16)['default'];
 
-var _require = __webpack_require__(15),
+var _require = __webpack_require__(16),
     printStyle = _require.printStyle;
 
 var _require2 = __webpack_require__(122),
@@ -45659,7 +45670,7 @@ module.exports = __webpack_require__(7).Object.setPrototypeOf;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = __webpack_require__(17);
+var $export = __webpack_require__(18);
 $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(199).set });
 
 
@@ -58200,7 +58211,7 @@ var _keys = __webpack_require__(8);
 
 var _keys2 = _interopRequireDefault(_keys);
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(15);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
