@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.2.7
- * @date    2017-12-22
+ * @date    2018-01-10
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -19080,6 +19080,10 @@ ItemSet.prototype._onDrag = function (event) {
       me.options.onMoving(itemData, function (itemData) {
         if (itemData) {
           props.item.setData(this._cloneItemData(itemData, 'Date'));
+          //ngg-vis
+          var dataset = this.itemsData.getDataSet();
+          dataset.update(itemData);
+          //ngg-vis-end
         }
       }.bind(this));
     }.bind(this));
