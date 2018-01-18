@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.2.7
- * @date    2018-01-10
+ * @version 2.2.9
+ * @date    2018-01-18
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -17604,8 +17604,9 @@ function ItemSet(body, options) {
   this.groupsData = null; // DataSet
   //ngg-vis
   this.resourceSearchTerm = null;
+  this.dragScrollTopOffset = 0;
+  this.itemPointBeforeScroll = null;
   //ngg-vis end
-
   // listeners for the DataSet of the items
   this.itemListeners = {
     'add': function add(event, params, senderId) {
@@ -19000,7 +19001,24 @@ ItemSet.prototype._onDrag = function (event) {
       } else {
         offset = current - initial; // ms
       }
-
+      //ngg-vis
+      if (!me.itemPointBeforeScroll) {
+        me.itemPointBeforeScroll = me.body.domProps.scrollTop;
+      }
+      var domHeight = me.body.dom.root.offsetHeight;
+      //calculating offset difference to set scrollTop
+      var heightOffset = me.body.dom.center.clientHeight - me.body.dom.centerContainer.offsetHeight;
+      var scrollOffset = event.center.y - me.body.domProps.scrollTop - me.body.domProps.top.height;
+      //while scrolling down check point y > container height set scrollTop
+      if (event.additionalEvent === 'pandown' && event.center.y > domHeight + me.dragScrollTopOffset) {
+        me.dragScrollTopOffset = 25;
+        me.body.domProps.scrollTop = -(event.center.y + me.dragScrollOffset.down);
+      } else if (event.additionalEvent === 'panup' && scrollOffset < heightOffset) {
+        // while scrollling up check if scrollOffset < heightOffset, set scrollTop
+        var scrollTop = me.body.domProps.scrollTop === -301 ? -(event.center.y - 50) : me.body.domProps.scrollTop + 50;
+        me.body.domProps.scrollTop = scrollTop;
+      }
+      //ngg-vis end
       var itemData = this._cloneItemData(props.item.data); // clone the data
       if (props.item.editable != null && !props.item.editable.updateTime && !props.item.editable.updateGroup && !me.options.editable.overrideItems) {
         return;
@@ -19159,10 +19177,18 @@ ItemSet.prototype._onDragEnd = function (event) {
         });
 
         //ngg-vis
-        var dataTransfer = new window.DataTransfer();
-        dataTransfer.setData('text', (0, _stringify2['default'])(itemData));
-        event.dataTransfer = dataTransfer;
-        this._onDropObjectOnItem(event);
+        this.dragScrollTopOffset = 0;
+        var virtualObj = dataset.get('virtual-' + itemData.id);
+        if (Number(itemData.group) && virtualObj) {
+          var dataTransfer = new window.DataTransfer();
+          dataTransfer.setData('text', (0, _stringify2['default'])(itemData));
+          event.dataTransfer = dataTransfer;
+          this._onDropObjectOnItem(event);
+        } else {
+          this.body.domProps.scrollTop = this.itemPointBeforeScroll;
+        }
+        this.itemPointBeforeScroll = null;
+
         //ngg-vis-end
       }
     }.bind(this));
