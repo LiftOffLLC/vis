@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.2.9
- * @date    2018-01-18
+ * @version 2.3.0
+ * @date    2018-02-06
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -17747,7 +17747,9 @@ ItemSet.prototype._create = function () {
   this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL });
 
   // single select (or unselect) when tapping an item
-  this.hammer.on('tap', this._onSelectItem.bind(this));
+  //ngg-vis
+  //this.hammer.on('tap',  this._onSelectItem.bind(this));
+  //ngg-vis-end
 
   // multi select when holding mouse/touch, or on ctrl+click
   this.hammer.on('press', this._onMultiSelectItem.bind(this));
@@ -41524,7 +41526,7 @@ Timeline.prototype.highLightTech = function (id) {
   var nestedGroupsIdObj = {};
   for (var i = 0; i < groupsLen; i++) {
     var item = groups[i];
-    if (Number(item.id) === id) {
+    if (item.id === id) {
       nestedGroupsIdObj[item.nestedInGroup] = true;
       item.className = item.className + ' res-hilite';
     } else {
