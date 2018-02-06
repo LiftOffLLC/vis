@@ -4,7 +4,7 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.3.0
+ * @version 2.3.1
  * @date    2018-02-06
  *
  * @license
@@ -41526,7 +41526,7 @@ Timeline.prototype.highLightTech = function (id) {
   var nestedGroupsIdObj = {};
   for (var i = 0; i < groupsLen; i++) {
     var item = groups[i];
-    if (item.id === id) {
+    if (Number(item.id) === id) {
       nestedGroupsIdObj[item.nestedInGroup] = true;
       item.className = item.className + ' res-hilite';
     } else {
