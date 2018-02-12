@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.3.2
- * @date    2018-02-06
+ * @version 2.3.3
+ * @date    2018-02-12
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -18034,7 +18034,33 @@ ItemSet.prototype.setSelection = function (ids) {
     }
   }
 };
-
+//ngg-vis
+ItemSet.prototype.setDefaultGanttView = function () {
+  var groupsData = this.groupsData.getDataSet();
+  var data = groupsData.get();
+  var groups = data.filter(function (group) {
+    return !group.nestedGroups && group.hasOwnProperty('visible') && !group.visible;
+  });
+  var nestedGroups = data.filter(function (group) {
+    return group.nestedGroups && group.nestedGroups.length > 0 && group.hasOwnProperty('showNested') && !group.showNested;
+  });
+  var groupsLen = groups.length;
+  var nestedGroupsLen = nestedGroups.length;
+  for (var i = 0; i < groupsLen; i++) {
+    var resource = groups[i];
+    resource.visible = true;
+  }
+  for (var j = 0; j < nestedGroupsLen; j++) {
+    var subGrp = nestedGroups[j];
+    subGrp.showNested = true;
+  }
+  var cmpldData = groups.concat(nestedGroups) || [];
+  if (cmpldData.length > 0) {
+    groupsData.update(cmpldData);
+  }
+  return cmpldData.length;
+};
+//ngg-vis-end
 /**
  * Get the selected items by their id
  * @return {Array} ids  The ids of the selected items
@@ -41055,13 +41081,27 @@ Timeline.prototype.setData = function (data) {
  *                                    function is 'easeInOutQuad'.
  *                                    Only applicable when option focus is true.
  */
-Timeline.prototype.setSelection = function (ids, options) {
+//ngg-vis
+Timeline.prototype.setSelection = function (ids, options, setDefaultGanttView) {
+  var _this = this;
+
+  if (ids && ids.length > 0 && setDefaultGanttView) {
+    var updatedItems = this.itemSet.setDefaultGanttView();
+  }
   this.itemSet && this.itemSet.setSelection(ids);
 
   if (options && options.focus) {
-    this.focus(ids, options);
+    if (updatedItems && updatedItems > 0) {
+      var timeout = Math.ceil(updatedItems / 5) * 1000;
+      setTimeout(function () {
+        _this.focus(ids, options);
+      }, timeout);
+    } else {
+      this.focus(ids, options);
+    }
   }
 };
+//ngg-vis-end
 
 /**
  * Get the selected items by their id
@@ -41515,27 +41555,19 @@ Timeline.prototype.highLightTech = function (id) {
 
   var groupsData = this.groupsData.getDataSet();
   var data = groupsData.get();
-  var groups = data.filter(function (group) {
-    return !group.nestedGroups;
+  var updateArr = data.filter(function (group) {
+    return !group.nestedGroups && group.className.includes('res-hilite');
   });
-  var nestedGroups = data.filter(function (group) {
-    return group.nestedGroups;
-  });
-  var groupsLen = groups.length;
-  var nestedGroupsLen = nestedGroups.length;
-  var nestedGroupsIdObj = {};
-  for (var i = 0; i < groupsLen; i++) {
-    var item = groups[i];
-    if (Number(item.id) === Number(id)) {
-      nestedGroupsIdObj[item.nestedInGroup] = true;
-      item.className = item.className + ' res-hilite';
-    } else {
-      item.className = item.className.replace(/ res-hilite/g, '');
-    }
+  if (updateArr.length > 0) {
+    var className = updateArr[0].className;
+    updateArr[0].className = className.replace(/ res-hilite/g, '');
   }
-
-  var cmpldData = groups.concat(nestedGroups);
-  groupsData.update(cmpldData);
+  if (id) {
+    var currGrp = groupsData.get(id);
+    currGrp.className += ' res-hilite';
+    updateArr.push(currGrp);
+  }
+  groupsData.update(updateArr);
 };
 //ngg-vis end
 module.exports = Timeline;
