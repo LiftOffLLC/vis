@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.3.3
- * @date    2018-02-12
+ * @version 2.3.4
+ * @date    2018-02-13
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -41083,22 +41083,30 @@ Timeline.prototype.setData = function (data) {
  */
 //ngg-vis
 Timeline.prototype.setSelection = function (ids, options, setDefaultGanttView) {
+  this.itemSet && this.itemSet.setSelection(ids);
+
+  if (options && options.focus) {
+    if (setDefaultGanttView) {
+      this.extendedFocus(ids, options, setDefaultGanttView);
+    } else {
+      this.focus(ids, options);
+    }
+  }
+};
+
+Timeline.prototype.extendedFocus = function (ids, options, setDefaultGanttView) {
   var _this = this;
 
   if (ids && ids.length > 0 && setDefaultGanttView) {
     var updatedItems = this.itemSet.setDefaultGanttView();
   }
-  this.itemSet && this.itemSet.setSelection(ids);
-
-  if (options && options.focus) {
-    if (updatedItems && updatedItems > 0) {
-      var timeout = Math.ceil(updatedItems / 5) * 1000;
-      setTimeout(function () {
-        _this.focus(ids, options);
-      }, timeout);
-    } else {
-      this.focus(ids, options);
-    }
+  if (updatedItems && updatedItems > 0) {
+    var timeout = Math.ceil(updatedItems / 5) * 700;
+    setTimeout(function () {
+      _this.focus(ids, options);
+    }, timeout);
+  } else {
+    this.focus(ids, options);
   }
 };
 //ngg-vis-end
