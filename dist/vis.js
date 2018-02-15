@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.3.4
- * @date    2018-02-13
+ * @version 2.3.5
+ * @date    2018-02-15
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -41083,13 +41083,15 @@ Timeline.prototype.setData = function (data) {
  */
 //ngg-vis
 Timeline.prototype.setSelection = function (ids, options, setDefaultGanttView) {
-  this.itemSet && this.itemSet.setSelection(ids);
+  if (this.itemsData.get(ids)) {
+    this.itemSet && this.itemSet.setSelection(ids);
 
-  if (options && options.focus) {
-    if (setDefaultGanttView) {
-      this.extendedFocus(ids, options, setDefaultGanttView);
-    } else {
-      this.focus(ids, options);
+    if (options && options.focus) {
+      if (setDefaultGanttView) {
+        this.extendedFocus(ids, options, setDefaultGanttView);
+      } else {
+        this.focus(ids, options);
+      }
     }
   }
 };
@@ -41097,16 +41099,18 @@ Timeline.prototype.setSelection = function (ids, options, setDefaultGanttView) {
 Timeline.prototype.extendedFocus = function (ids, options, setDefaultGanttView) {
   var _this = this;
 
-  if (ids && ids.length > 0 && setDefaultGanttView) {
-    var updatedItems = this.itemSet.setDefaultGanttView();
-  }
-  if (updatedItems && updatedItems > 0) {
-    var timeout = Math.ceil(updatedItems / 5) * 700;
-    setTimeout(function () {
-      _this.focus(ids, options);
-    }, timeout);
-  } else {
-    this.focus(ids, options);
+  if (_this.itemsData.get(ids)) {
+    if (ids && ids.length > 0 && setDefaultGanttView) {
+      var updatedItems = this.itemSet.setDefaultGanttView();
+    }
+    if (updatedItems && updatedItems > 0) {
+      var timeout = Math.ceil(updatedItems / 5) * 700;
+      setTimeout(function () {
+        _this.focus(ids, options);
+      }, timeout);
+    } else {
+      this.focus(ids, options);
+    }
   }
 };
 //ngg-vis-end
