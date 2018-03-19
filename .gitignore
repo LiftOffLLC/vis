@@ -9,6 +9,7 @@ npm-debug.log
 .project
 .settings/
 .directory
+.history/
 
 # temporary files
 .*.sw[op]
