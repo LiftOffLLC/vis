@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.4.0
- * @date    2018-03-19
+ * @date    2018-04-02
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -42201,7 +42201,7 @@ Timeline.prototype.searchGroupData = function (term, sortedOrder) {
     var nestedGroupsIdObj = {};
     for (var i = 0; i < groupsLen; i++) {
         var item = groups[i];
-        if (new RegExp("^" + term, "i").test(item.name) || new RegExp(" " + term, "i").test(item.name) || new RegExp("^" + term).test(item.id) && item.hasOwnProperty("nestedInGroup")) {
+        if (new RegExp("^" + term, "i").test(item.Name) || new RegExp(" " + term, "i").test(item.Name) || new RegExp("^" + term).test(item.id) && item.hasOwnProperty("nestedInGroup")) {
             nestedGroupsIdObj[item.nestedInGroup] = true;
             item.visible = true;
         } else {
