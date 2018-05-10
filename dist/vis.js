@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.4.1
- * @date    2018-04-04
+ * @date    2018-05-10
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -41656,6 +41656,7 @@ Timeline.prototype.setItems = function (items) {
 
     // set items
     //ngg-vis
+    if (!newDataSet || !newDataSet.length) return;
     if (this.itemsData && items) {
         var itemsLen = items.length;
         var remItems = [];
