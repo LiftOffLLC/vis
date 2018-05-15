@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.4.2
- * @date    2018-05-11
+ * @date    2018-05-15
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -10085,6 +10085,12 @@ Core.prototype.removeCustomTime = function (id) {
 Core.prototype.getVisibleItems = function () {
   return this.itemSet && this.itemSet.getVisibleItems() || [];
 };
+
+//ngg-vis
+Core.prototype.getItemsForDay = function (obj, grp) {
+  return this.itemSet && this.itemSet.getItemsForDay(obj, grp) || [];
+};
+//ngg-vis-end
 
 /**
  * Set Core window such that it fits all items
@@ -22652,6 +22658,26 @@ ItemSet.prototype.getVisibleItems = function () {
 
   return ids;
 };
+
+//ngg-vis
+ItemSet.prototype.getItemsForDay = function (obj, group) {
+  var start = obj.startOf("day");
+  var end = start.clone().endOf("day");
+  var data = this.groups[group].items;
+  var ids = [];
+  for (var id in data) {
+    if (data.hasOwnProperty(id)) {
+      if (Number(id)) {
+        var item = data[id];
+        if (item.data.start.isBetween(start, end)) {
+          ids.push(id);
+        }
+      }
+    }
+  }
+  return ids;
+};
+//ngg-vis-end
 
 /**
  * Deselect a selected item
@@ -41656,7 +41682,6 @@ Timeline.prototype.setItems = function (items) {
 
     // set items
     //ngg-vis
-    //if (!newDataSet || !newDataSet.length) return;
     if (this.itemsData && items) {
         var itemsLen = items.length;
         var remItems = [];
