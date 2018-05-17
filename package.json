@@ -1,6 +1,6 @@
 {
     "name": "ngg-vis",
-    "version": "2.4.2",
+    "version": "2.4.3",
     "description": "A dynamic, browser-based visualization library.",
     "homepage": "http://visjs.org/",
     "license": "(Apache-2.0 OR MIT)",
