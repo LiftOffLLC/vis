@@ -41978,7 +41978,7 @@ function getItemVerticalScroll(timeline, item) {
     var leftHeight = timeline.props.leftContainer.height;
     var contentHeight = timeline.props.left.height;
 
-    var group = item.parent;
+    var group = item.parent || item;
     var offset = group.top;
     var shouldScroll = true;
     var orientation = timeline.timeAxis.options.orientation.axis;
@@ -42267,6 +42267,12 @@ Timeline.prototype.highLightTech = function (id) {
         var currGrp = groupsData.get(id);
         currGrp.className += " res-hilite";
         updateArr.push(currGrp);
+
+        /** scrolls to the group position **/
+        let item = this.itemSet.groups[id];
+        let verticalScroll = getItemVerticalScroll(this, item);
+        let toPos = verticalScroll.scrollOffset;
+        this._setScrollTop(-toPos);
     }
     groupsData.update(updateArr);
 };
