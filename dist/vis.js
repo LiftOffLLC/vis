@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.4.3
- * @date    2018-05-17
+ * @date    2018-06-04
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -41765,15 +41765,16 @@ Timeline.prototype.setData = function (data) {
  *                                    Only applicable when option focus is true.
  */
 //ngg-vis
-Timeline.prototype.setSelection = function (ids, options, setDefaultGanttView) {
+// Adding callback in signature
+Timeline.prototype.setSelection = function (ids, options, setDefaultGanttView, callback) {
     if (this.itemsData.get(ids)) {
         this.itemSet && this.itemSet.setSelection(ids);
 
         if (options && options.focus) {
             if (setDefaultGanttView) {
-                this.extendedFocus(ids, options, setDefaultGanttView);
+                this.extendedFocus(ids, options, setDefaultGanttView, callback);
             } else {
-                this.focus(ids, options);
+                this.focus(ids, options, callback);
             }
         }
     }
@@ -41783,7 +41784,7 @@ Timeline.prototype.setTimeZone = function (tz) {
     momentTimeZone.tz.setDefault(tz);
 };
 
-Timeline.prototype.extendedFocus = function (ids, options, setDefaultGanttView) {
+Timeline.prototype.extendedFocus = function (ids, options, setDefaultGanttView, callback) {
     var _this = this;
 
     if (_this.itemsData.get(ids)) {
@@ -41793,10 +41794,10 @@ Timeline.prototype.extendedFocus = function (ids, options, setDefaultGanttView) 
         if (updatedItems && updatedItems > 0) {
             var timeout = Math.ceil(updatedItems / 5) * 700;
             setTimeout(function () {
-                _this.focus(ids, options);
+                _this.focus(ids, options, callback);
             }, timeout);
         } else {
-            this.focus(ids, options);
+            this.focus(ids, options, callback);
         }
     }
 };
@@ -41822,7 +41823,9 @@ Timeline.prototype.getSelection = function () {
  *                                    Default duration is 500 ms, and default easing
  *                                    function is 'easeInOutQuad'.
  */
-Timeline.prototype.focus = function (id, options) {
+
+//ngg-vis added only callback in the signature
+Timeline.prototype.focus = function (id, options, callback) {
     if (!this.itemsData || id == undefined) return;
 
     var ids = Array.isArray(id) ? id : [id];
@@ -41920,8 +41923,12 @@ Timeline.prototype.focus = function (id, options) {
         }
 
         this.range.setRange(middle - interval / 2, middle + interval / 2, { animation: animation }, finalVerticalCallback, verticalAnimationFrame);
+
+        //ngg-vis adding callback
+        callback ? callback() : {};
     }
 };
+//ngg-vis - end
 
 /**
  * Set Timeline window such that it fits all items
@@ -41978,7 +41985,7 @@ function getItemVerticalScroll(timeline, item) {
     var leftHeight = timeline.props.leftContainer.height;
     var contentHeight = timeline.props.left.height;
 
-    var group = item.parent || item;
+    var group = item.parent;
     var offset = group.top;
     var shouldScroll = true;
     var orientation = timeline.timeAxis.options.orientation.axis;
@@ -42267,12 +42274,6 @@ Timeline.prototype.highLightTech = function (id) {
         var currGrp = groupsData.get(id);
         currGrp.className += " res-hilite";
         updateArr.push(currGrp);
-
-        /** scrolls to the group position **/
-        let item = this.itemSet.groups[id];
-        let verticalScroll = getItemVerticalScroll(this, item);
-        let toPos = verticalScroll.scrollOffset;
-        this._setScrollTop(-toPos);
     }
     groupsData.update(updateArr);
 };
