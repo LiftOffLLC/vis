@@ -9548,7 +9548,7 @@ Core.prototype._create = function (container) {
   this.hammer = new Hammer(this.dom.root);
   var pinchRecognizer = this.hammer.get('pinch').set({ enable: true });
   hammerUtil.disablePreventDefaultVertically(pinchRecognizer);
-  this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL });
+  this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_ALL });
   this.listeners = {};
 
   var events = ['tap', 'doubletap', 'press', 'pinch', 'pan', 'panstart', 'panmove', 'panend'
@@ -22291,7 +22291,7 @@ ItemSet.prototype._create = function () {
   this.hammer.on('panstart', this._onDragStart.bind(this));
   this.hammer.on('panmove', this._onDrag.bind(this));
   this.hammer.on('panend', this._onDragEnd.bind(this));
-  this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL });
+  this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_ALL });
 
   // single select (or unselect) when tapping an item
   //ngg-vis
@@ -23605,13 +23605,12 @@ ItemSet.prototype._onDrag = function (event) {
       var heightOffset = me.body.dom.center.clientHeight - me.body.dom.centerContainer.offsetHeight;
       var scrollOffset = event.center.y - me.body.domProps.scrollTop - me.body.domProps.top.height;
       //while scrolling down check point y > container height set scrollTop
-      if (event.additionalEvent === 'pandown' && event.center.y > domHeight + me.dragScrollTopOffset) {
+      if (event.additionalEvent === 'pandown' && event.center.y > me.body.domProps.scrollTop) {
         me.dragScrollTopOffset = 25;
-        me.body.domProps.scrollTop = -(event.center.y + me.dragScrollOffset.down);
+        me.body.domProps.scrollTop -= 100;
       } else if (event.additionalEvent === 'panup' && scrollOffset < heightOffset) {
         // while scrollling up check if scrollOffset < heightOffset, set scrollTop
-        var scrollTop = me.body.domProps.scrollTop === -301 ? -(event.center.y - 50) : me.body.domProps.scrollTop + 50;
-        me.body.domProps.scrollTop = scrollTop;
+        me.body.domProps.scrollTop += 100;
       }
       //ngg-vis end
       var itemData = this._cloneItemData(props.item.data); // clone the data
