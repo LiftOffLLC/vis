@@ -41860,7 +41860,10 @@ Timeline.prototype.focus = function (id, options, callback) {
         var item = this.itemSet.items[ids[0]];
         //ngg-vis
         this.itemSet.focusIds.push(ids[0]);
-        item.dom.box.className += " vis-selected";
+        if (item.dom && item.dom.box && item.dom.box.className) {
+            item.dom.box.className += " vis-selected";
+        }
+
         //ngg-vis-end
         var startPos = this._getScrollTop() * -1;
         var initialVerticalScroll = null;
