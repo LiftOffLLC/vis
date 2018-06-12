@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.4.7
- * @date    2018-06-11
+ * @date    2018-06-12
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -41834,6 +41834,9 @@ Timeline.prototype.focus = function (id, options, callback) {
             var focusedItem = this.itemSet.items[this.itemSet.focusIds[i]];
             if (focusedItem) {
                 focusedItem.dom.box.className = focusedItem.dom.box.className.replace(/vis-selected/g, "");
+                this.itemSet.focusIds = this.itemSet.focusIds.filter(function (id) {
+                    return id !== focusedItem.id;
+                });
             }
         }
     }
