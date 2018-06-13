@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.4.6
- * @date    2018-06-06
+ * @date    2018-06-13
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -9549,6 +9549,7 @@ Core.prototype._create = function (container) {
   var pinchRecognizer = this.hammer.get('pinch').set({ enable: true });
   hammerUtil.disablePreventDefaultVertically(pinchRecognizer);
   this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_ALL });
+  this.hammer.get('press').set({ time: 10000 });
   this.listeners = {};
 
   var events = ['tap', 'doubletap', 'press', 'pinch', 'pan', 'panstart', 'panmove', 'panend'
@@ -22292,6 +22293,7 @@ ItemSet.prototype._create = function () {
   this.hammer.on('panmove', this._onDrag.bind(this));
   this.hammer.on('panend', this._onDragEnd.bind(this));
   this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_ALL });
+  this.hammer.get('press').set({ time: 10000 });
 
   // single select (or unselect) when tapping an item
   //ngg-vis
