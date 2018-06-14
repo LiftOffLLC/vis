@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.4.7
- * @date    2018-06-12
+ * @date    2018-06-14
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -9548,6 +9548,7 @@ Core.prototype._create = function (container) {
   var pinchRecognizer = this.hammer.get('pinch').set({ enable: true });
   hammerUtil.disablePreventDefaultVertically(pinchRecognizer);
   this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_ALL });
+  this.hammer.get('press').set({ time: 10000 });
   this.listeners = {};
 
   var events = ['tap', 'doubletap', 'press', 'pinch', 'pan', 'panstart', 'panmove', 'panend'
@@ -22233,31 +22234,31 @@ ItemSet.types = {
  * Create the HTML DOM for the ItemSet
  */
 ItemSet.prototype._create = function () {
-    var frame = document.createElement("div");
-    frame.className = "vis-itemset";
-    frame["timeline-itemset"] = this;
+    var frame = document.createElement('div');
+    frame.className = 'vis-itemset';
+    frame['timeline-itemset'] = this;
     this.dom.frame = frame;
 
     // create background panel
-    var background = document.createElement("div");
-    background.className = "vis-background";
+    var background = document.createElement('div');
+    background.className = 'vis-background';
     frame.appendChild(background);
     this.dom.background = background;
 
     // create foreground panel
-    var foreground = document.createElement("div");
-    foreground.className = "vis-foreground";
+    var foreground = document.createElement('div');
+    foreground.className = 'vis-foreground';
     frame.appendChild(foreground);
     this.dom.foreground = foreground;
 
     // create axis panel
-    var axis = document.createElement("div");
-    axis.className = "vis-axis";
+    var axis = document.createElement('div');
+    axis.className = 'vis-axis';
     this.dom.axis = axis;
 
     // create labelset
-    var labelSet = document.createElement("div");
-    labelSet.className = "vis-labelset";
+    var labelSet = document.createElement('div');
+    labelSet.className = 'vis-labelset';
     this.dom.labelSet = labelSet;
 
     // create ungrouped Group
@@ -22275,15 +22276,16 @@ ItemSet.prototype._create = function () {
     this.hammer = new Hammer(this.body.dom.centerContainer);
 
     // drag items when selected
-    this.hammer.on("hammer.input", function (event) {
+    this.hammer.on('hammer.input', function (event) {
         if (event.isFirst) {
             this._onTouch(event);
         }
     }.bind(this));
-    this.hammer.on("panstart", this._onDragStart.bind(this));
-    this.hammer.on("panmove", this._onDrag.bind(this));
-    this.hammer.on("panend", this._onDragEnd.bind(this));
-    this.hammer.get("pan").set({ threshold: 5, direction: Hammer.DIRECTION_ALL });
+    this.hammer.on('panstart', this._onDragStart.bind(this));
+    this.hammer.on('panmove', this._onDrag.bind(this));
+    this.hammer.on('panend', this._onDragEnd.bind(this));
+    this.hammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_ALL });
+    this.hammer.get('press').set({ time: 10000 });
 
     // single select (or unselect) when tapping an item
     //ngg-vis
@@ -22291,10 +22293,10 @@ ItemSet.prototype._create = function () {
     //ngg-vis-end
 
     // multi select when holding mouse/touch, or on ctrl+click
-    this.hammer.on("press", this._onMultiSelectItem.bind(this));
+    this.hammer.on('press', this._onMultiSelectItem.bind(this));
 
     // add item on doubletap
-    this.hammer.on("doubletap", this._onAddItem.bind(this));
+    this.hammer.on('doubletap', this._onAddItem.bind(this));
 
     if (this.options.rtl) {
         this.groupHammer = new Hammer(this.body.dom.rightContainer);
@@ -22302,19 +22304,19 @@ ItemSet.prototype._create = function () {
         this.groupHammer = new Hammer(this.body.dom.leftContainer);
     }
 
-    this.groupHammer.on("tap", this._onGroupClick.bind(this));
-    this.groupHammer.on("panstart", this._onGroupDragStart.bind(this));
-    this.groupHammer.on("panmove", this._onGroupDrag.bind(this));
-    this.groupHammer.on("panend", this._onGroupDragEnd.bind(this));
-    this.groupHammer.get("pan").set({ threshold: 5, direction: Hammer.DIRECTION_VERTICAL });
+    this.groupHammer.on('tap', this._onGroupClick.bind(this));
+    this.groupHammer.on('panstart', this._onGroupDragStart.bind(this));
+    this.groupHammer.on('panmove', this._onGroupDrag.bind(this));
+    this.groupHammer.on('panend', this._onGroupDragEnd.bind(this));
+    this.groupHammer.get('pan').set({ threshold: 5, direction: Hammer.DIRECTION_VERTICAL });
 
-    this.body.dom.centerContainer.addEventListener("mouseover", this._onMouseOver.bind(this));
-    this.body.dom.centerContainer.addEventListener("mouseout", this._onMouseOut.bind(this));
-    this.body.dom.centerContainer.addEventListener("mousemove", this._onMouseMove.bind(this));
+    this.body.dom.centerContainer.addEventListener('mouseover', this._onMouseOver.bind(this));
+    this.body.dom.centerContainer.addEventListener('mouseout', this._onMouseOut.bind(this));
+    this.body.dom.centerContainer.addEventListener('mousemove', this._onMouseMove.bind(this));
     // right-click on timeline
-    this.body.dom.centerContainer.addEventListener("contextmenu", this._onDragEnd.bind(this));
+    this.body.dom.centerContainer.addEventListener('contextmenu', this._onDragEnd.bind(this));
 
-    this.body.dom.centerContainer.addEventListener("mousewheel", this._onMouseWheel.bind(this));
+    this.body.dom.centerContainer.addEventListener('mousewheel', this._onMouseWheel.bind(this));
 
     // attach to the DOM
     this.show();
