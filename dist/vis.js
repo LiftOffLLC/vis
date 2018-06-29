@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.4.9
- * @date    2018-06-27
+ * @version 2.5.0
+ * @date    2018-06-29
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -22146,7 +22146,6 @@ function ItemSet(body, options) {
     this.resourceSearchTerm = null;
     this.dragScrollTopOffset = 0;
     this.itemPointBeforeScroll = null;
-    this.focusIds = [];
     //ngg-vis end
     // listeners for the DataSet of the items
     this.itemListeners = {
@@ -41831,19 +41830,6 @@ Timeline.prototype.focus = function (id, options, callback) {
         }
         //ngg-vis-end
     });
-    //ngg-vis
-    if (this.itemSet.focusIds && this.itemSet.focusIds.length) {
-        for (var i = 0; i < this.itemSet.focusIds.length; i++) {
-            var focusedItem = this.itemSet.items[this.itemSet.focusIds[i]];
-            if (focusedItem && focusedItem.dom) {
-                focusedItem.dom.box.className = focusedItem.dom.box.className.replace(/vis-selected/g, "");
-                this.itemSet.focusIds = this.itemSet.focusIds.filter(function (id) {
-                    return id !== focusedItem.id;
-                });
-            }
-        }
-    }
-    //ngg-vis-end
     // calculate minimum start and maximum end of specified items
     var start = null;
     var end = null;
@@ -41864,13 +41850,6 @@ Timeline.prototype.focus = function (id, options, callback) {
         var me = this;
         // Use the first item for the vertical focus
         var item = this.itemSet.items[ids[0]];
-        //ngg-vis
-        this.itemSet.focusIds.push(ids[0]);
-        if (item.dom && item.dom.box && item.dom.box.className) {
-            item.dom.box.className += " vis-selected";
-        }
-
-        //ngg-vis-end
         var startPos = this._getScrollTop() * -1;
         var initialVerticalScroll = null;
 
