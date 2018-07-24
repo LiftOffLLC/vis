@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.5.0
- * @date    2018-07-10
+ * @version 2.5.1
+ * @date    2018-07-24
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -9454,6 +9454,8 @@ Core.prototype._create = function (container) {
   this.dom.shadowTopRight = document.createElement('div');
   this.dom.shadowBottomRight = document.createElement('div');
   this.dom.rollingModeBtn = document.createElement('div');
+  this.dom.panningZoneLeft = document.createElement('div');
+  this.dom.panningZoneRight = document.createElement('div');
 
   this.dom.root.className = 'vis-timeline';
   this.dom.background.className = 'vis-panel vis-background';
@@ -9474,6 +9476,8 @@ Core.prototype._create = function (container) {
   this.dom.shadowTopRight.className = 'vis-shadow vis-top';
   this.dom.shadowBottomRight.className = 'vis-shadow vis-bottom';
   this.dom.rollingModeBtn.className = 'vis-rolling-mode-btn';
+  this.dom.panningZoneLeft.className = 'panningZoneLeft';
+  this.dom.panningZoneRight.className = 'panningZoneRight';
 
   this.dom.root.appendChild(this.dom.background);
   this.dom.root.appendChild(this.dom.backgroundVertical);
@@ -9495,6 +9499,8 @@ Core.prototype._create = function (container) {
   this.dom.leftContainer.appendChild(this.dom.shadowBottomLeft);
   this.dom.rightContainer.appendChild(this.dom.shadowTopRight);
   this.dom.rightContainer.appendChild(this.dom.shadowBottomRight);
+  this.dom.centerContainer.appendChild(this.dom.panningZoneLeft);
+  this.dom.centerContainer.appendChild(this.dom.panningZoneRight);
 
   // size properties of each of the panels
   this.props = {
@@ -22320,6 +22326,51 @@ ItemSet.prototype._create = function () {
     // right-click on timeline
     this.body.dom.centerContainer.addEventListener("contextmenu", this._onDragEnd.bind(this));
 
+    //to handle horizontal scroll ngg-vis
+    this.body.dom.centerContainer.addEventListener('mouseout', this._onMouseOut.bind(this));
+
+    this.dragEvent = null;
+
+    this.touchParams.mouseOnLeft = this.touchParams.mouseOnRight = this.touchParams.mouseIsLeaving = false;
+
+    this.setMouseOnLeft = function (isOn) {
+        this.touchParams.mouseOnLeft = isOn;
+        this.setMouseLeave(false);
+    };
+
+    this.setMouseOnRight = function (isOn) {
+        this.touchParams.mouseOnRight = isOn;
+        this.setMouseLeave(false);
+    };
+
+    this.setMouseLeave = function (isLeaveNow) {
+        this.touchParams.mouseIsLeaving = isLeaveNow;
+
+        if ((this.touchParams.mouseOnLeft || this.touchParams.mouseOnRight) && isLeaveNow) {
+            if (this.dragEvent) ItemSet.prototype._onDragEnd.bind(this)(this.dragEvent);
+            this.touchParams.mouseOnLeft = this.touchParams.mouseOnRight = false;
+        }
+    };
+
+    var context = this;
+
+    this.body.dom.panningZoneLeft.onmouseenter = this.body.dom.leftContainer.onmouseenter = function () {
+        context.setMouseOnLeft(true);
+    };
+
+    this.body.dom.panningZoneLeft.onmouseleave = this.body.dom.leftContainer.onmouseleave = function () {
+        context.setMouseLeave(true);
+    };
+
+    this.body.dom.panningZoneRight.onmouseenter = this.body.dom.rightContainer.onmouseenter = function () {
+        context.setMouseOnRight(true);
+    };
+
+    this.body.dom.panningZoneRight.onmouseleave = this.body.dom.rightContainer.onmouseleave = function () {
+        context.setMouseLeave(true);
+    };
+
+    /// ngg-vis end
     this.body.dom.centerContainer.addEventListener("mousewheel", this._onMouseWheel.bind(this));
 
     // attach to the DOM
@@ -23546,6 +23597,35 @@ ItemSet.prototype._onDragStartAddItem = function (event) {
  * @private
  */
 ItemSet.prototype._onDrag = function (event) {
+    // to handle horizontal scroll ngg-vis
+    if ((this.touchParams.mouseOnLeft || this.touchParams.mouseOnRight) && this.touchParams.itemProps) {
+        this.dragEvent = event;
+
+        var range = this.body.getWindow();
+        var start = range.start.valueOf();
+        var end = range.end.valueOf();
+        var interval = end - start;
+
+        var distance = interval * 2 / 100;
+
+        if (this.options.rtl && this.touchParams.mouseOnLeft || !this.options.rtl && this.touchParams.mouseOnRight) {
+            var newStart = start + distance;
+            var newEnd = end + distance;
+        } else {
+            var newStart = start - distance;
+            var newEnd = end - distance;
+        }
+
+        this.body.range._applyRange(newStart, newEnd);
+
+        this.body.emitter.emit('rangechange', {
+            start: newStart,
+            end: newEnd,
+            byUser: true,
+            event: event
+        });
+    }
+    //ngg-vis end
     if (this.touchParams.itemProps) {
         event.stopPropagation();
 
@@ -23656,6 +23736,23 @@ ItemSet.prototype._onDrag = function (event) {
                     if (itemData.start != undefined) {
                         initialStart = util.convert(props.data.start, "Date").valueOf();
                         start = new Date(initialStart + offset);
+
+                        //horizontal scroll ngg-vis
+                        if (this.touchParams.mouseOnLeft || this.touchParams.mouseOnRight) {
+
+                            var range = this.body.getWindow();
+                            var windowStart = range.start.valueOf();
+                            var windowEnd = range.end.valueOf();
+                            var itemWidth = 1000;
+
+                            if (this.options.rtl && this.touchParams.mouseOnLeft || !this.options.rtl && this.touchParams.mouseOnRight) {
+                                if (props.item.data.end) itemWidth = props.item.data.end.valueOf() - props.item.data.start.valueOf();
+                                start = windowEnd - itemWidth;
+                            } else {
+                                start = windowStart;
+                            }
+                        }
+                        //ngg-vis end
 
                         if (itemData.end != undefined) {
                             initialEnd = util.convert(props.data.end, "Date");
@@ -41473,6 +41570,7 @@ function Timeline(container, items, groups, options) {
     this.components = [];
 
     this.body = {
+        getWindow: this.getWindow,
         dom: this.dom,
         domProps: this.props,
         emitter: {
