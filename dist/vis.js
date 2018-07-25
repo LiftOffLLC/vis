@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.5.1
- * @date    2018-07-24
+ * @date    2018-07-25
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -11303,7 +11303,7 @@ TimeStep.snap = function (date, scale, step) {
       case 4:
         clone.minutes(Math.round(clone.minutes() / 60) * 60);break;
       default:
-        clone.minutes(Math.round(clone.minutes() / 30) * 30);break;
+        clone.minutes(Math.round(clone.minutes() / 30) * 15);break;
     }
     clone.seconds(0);
     clone.milliseconds(0);
@@ -22347,7 +22347,7 @@ ItemSet.prototype._create = function () {
         this.touchParams.mouseIsLeaving = isLeaveNow;
 
         if ((this.touchParams.mouseOnLeft || this.touchParams.mouseOnRight) && isLeaveNow) {
-            if (this.dragEvent) ItemSet.prototype._onDragEnd.bind(this)(this.dragEvent);
+            if (this.dragEvent) ItemSet.prototype._onDrag.bind(this)(this.dragEvent);
             this.touchParams.mouseOnLeft = this.touchParams.mouseOnRight = false;
         }
     };
@@ -23739,7 +23739,6 @@ ItemSet.prototype._onDrag = function (event) {
 
                         //horizontal scroll ngg-vis
                         if (this.touchParams.mouseOnLeft || this.touchParams.mouseOnRight) {
-
                             var range = this.body.getWindow();
                             var windowStart = range.start.valueOf();
                             var windowEnd = range.end.valueOf();
@@ -23765,6 +23764,16 @@ ItemSet.prototype._onDrag = function (event) {
                             // TODO: pass a Moment instead of a Date to snap(). (Breaking change)
                             itemData.start = snap ? snap(start, scale, step) : start;
                         }
+
+                        // ngg-vis Horizontal scroll set cursor time as item start time
+                        var container = this.body.dom.centerContainer;
+                        var x = event.center.x - util.getAbsoluteLeft(container) + container.offsetLeft;
+                        // var y = event.center.x - util.getAbsoluteTop(container) + container.offsetTop;
+                        var duration1 = itemData.end.valueOf() - itemData.start.valueOf();
+                        itemData.start = new Date(me.body.util.toTime(x).getTime() - 2 * 60 * 60 * 1000);
+                        itemData.start = snap ? snap(itemData.start, scale, step) : itemData.start;
+                        itemData.end = new Date(itemData.start.valueOf() + duration1);
+                        // ngg-vis Horizontal scroll
                     }
                 }
             }
