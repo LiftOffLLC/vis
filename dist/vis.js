@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 2.5.1
- * @date    2018-07-25
+ * @date    2018-07-30
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -11303,7 +11303,7 @@ TimeStep.snap = function (date, scale, step) {
       case 4:
         clone.minutes(Math.round(clone.minutes() / 60) * 60);break;
       default:
-        clone.minutes(Math.round(clone.minutes() / 30) * 15);break;
+        clone.minutes(Math.round(clone.minutes() / 30) * 30);break;
     }
     clone.seconds(0);
     clone.milliseconds(0);
@@ -11311,6 +11311,8 @@ TimeStep.snap = function (date, scale, step) {
     //noinspection FallthroughInSwitchStatementJS
     switch (step) {
       case 15:
+        clone.minutes(Math.round(clone.minutes() / 15) * 15);
+        break;
       case 10:
         clone.minutes(Math.round(clone.minutes() / 5) * 5);
         clone.seconds(0);
@@ -23770,8 +23772,9 @@ ItemSet.prototype._onDrag = function (event) {
                         var x = event.center.x - util.getAbsoluteLeft(container) + container.offsetLeft;
                         // var y = event.center.x - util.getAbsoluteTop(container) + container.offsetTop;
                         var duration1 = itemData.end.valueOf() - itemData.start.valueOf();
-                        itemData.start = new Date(me.body.util.toTime(x).getTime() - 2 * 60 * 60 * 1000);
-                        itemData.start = snap ? snap(itemData.start, scale, step) : itemData.start;
+                        itemData.start = new Date(me.body.util.toTime(x).getTime() - 2.5 * 60 * 60 * 1000);
+                        // to snap by 15 minutes sending scale as minutes and step as 15
+                        itemData.start = snap ? snap(itemData.start, "minute", 15) : itemData.start;
                         itemData.end = new Date(itemData.start.valueOf() + duration1);
                         // ngg-vis Horizontal scroll
                     }
