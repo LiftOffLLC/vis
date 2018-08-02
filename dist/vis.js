@@ -23722,7 +23722,6 @@ ItemSet.prototype._onDrag = function (event) {
                     }
                 } else if (props.dragRight) {
                     // drag right side of a range item
-                    console.log(this.options.rtl, itemData.start, itemData.end);
                     if (this.options.rtl) {
                         if (itemData.start != undefined) {
                             initialStart = util.convert(props.data.start, "Date");
@@ -23736,10 +23735,12 @@ ItemSet.prototype._onDrag = function (event) {
                             end = new Date(initialEnd.valueOf() + offset);
                             // TODO: pass a Moment instead of a Date to snap(). (Breaking change)
                             itemData.end = snap ? snap(end, scale, step) : end;
+                            // ngg-vis resize beyond viewPort
                             var container = this.body.dom.centerContainer;
                             var x = event.center.x - util.getAbsoluteLeft(container) + container.offsetLeft;
                             itemData.end = new Date(me.body.util.toTime(x).getTime() - 2.5 * 60 * 60 * 1000);
                             itemData.end = snap ? snap(itemData.end, "minute", 15) : itemData.end;
+                            // ngg-vis-end
                         }
                     }
                 } else {
