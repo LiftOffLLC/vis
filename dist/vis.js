@@ -4,8 +4,8 @@
  *
  * A dynamic, browser-based visualization library.
  *
- * @version 2.5.1
- * @date    2018-08-02
+ * @version 2.5.2
+ * @date    2018-08-23
  *
  * @license
  * Copyright (C) 2011-2017 Almende B.V, http://almende.com
@@ -42403,7 +42403,7 @@ Timeline.prototype.highLightTech = function (id) {
         var item = this.itemSet.groups[id];
         if (item) {
             var verticalScroll = getItemVerticalScroll(this, item);
-            var toPos = verticalScroll.scrollOffset;
+            var toPos = verticalScroll.itemTop - verticalScroll.scrollOffset;
             this._setScrollTop(-toPos);
         }
         //ngg-vis end
