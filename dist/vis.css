@@ -1272,6 +1272,21 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
   bottom: -1px;
   left: 0;
 }
+
+.panningZoneLeft, .panningZoneRight{
+  width: 3%;
+  height: 100%;
+  z-index: 99;
+  position: absolute
+}
+
+.panningZoneLeft{
+  left: 0;
+}
+
+.panningZoneRight{
+  right: 0;
+}
 .vis-graph-group0 {
     fill:#4f81bd;
     fill-opacity:0;
